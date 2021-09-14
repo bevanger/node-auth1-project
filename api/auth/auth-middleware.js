@@ -1,4 +1,3 @@
-const e = require('cors');
 const Users = require('../users/users-model');
 /*
   If the user does not have a session saved in the server
@@ -9,7 +8,7 @@ const Users = require('../users/users-model');
   }
 */
 function restricted(req, res, next) {
-  if (req.session && req.session.userId) {
+  if (req.session && req.session.user) {
     next()
   } else { 
     res.status(401).json({ message: 'you shall not pass!' })
@@ -28,7 +27,7 @@ function checkUsernameFree(req, res, next) {
   Users.findBy('username', req.body.username)
     .then((usernameIsTaken) => {
       if(usernameIsTaken.length > 0) {
-        next({ message: 'Username taken', status: 422})
+        next({ message: 'username taken', status: 422})
       } else {
         next()
       }
@@ -63,7 +62,7 @@ function checkUsernameExists(req, res, next) {
   }
 */
 function checkPasswordLength(req, res, next) {
-  if(req.body.password < 3 || !req.body.password) {
+  if(!req.body.password || req.body.password.length <= 3 ) {
     next({ message: 'Password must be longer than 3 chars', status: 422})
   } else {
     next()

@@ -10,15 +10,15 @@ function find() {
 /**
   resolves to an ARRAY with all users that match the filter condition
  */
-function findBy(filter) {
-  return db('users').where(filter).orderBy('user_id');
+function findBy(filter, value) {
+  return db('users').where(filter, value).orderBy('user_id');
 }
 
 /**
   resolves to the user { user_id, username } with the given user_id
  */
 function findById(user_id) {
-  return db('users').where({ user_id }).first();
+  return db('users').select('user_id', 'username').where({ user_id }).first();
 }
 
 /**
